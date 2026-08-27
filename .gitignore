@@ -1,0 +1,28 @@
+source_docs/
+# イントロ実践問題は5/60問のみ試作段階のためV1公開対象外(V1.1候補、ローカルには残す)
+data/intro_questions.json
+docs/INTRO_QUESTION_SCHEMA.md
+.DS_Store
+**/.DS_Store
+
+# Local settings and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.mobileprovision
+credentials*.json
+secrets*.json
+token*.json
+
+# Logs, caches, and generated weekly reports
+*.log
+node_modules/
+.cache/
+__pycache__/
+*.pyc
+reports/kairos-weekly/*.md
+reports/kairos-weekly/*.log
+.claude/

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study OS 管理者画面</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .admin-toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .admin-toolbar button {
+    border: none; border-radius: 10px; padding: 10px 16px; font-size: 13px;
+    font-weight: 700; cursor: pointer; font-family: inherit;
+  }
+  .btn-primary { background: var(--primary); color: white; }
+  .btn-secondary { background: #eef2ff; color: var(--primary-dark); }
+  .btn-danger { background: #ffeef0; color: #c0334a; }
+
+  table.q-table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); }
+  table.q-table th, table.q-table td { padding: 10px 12px; font-size: 13px; border-bottom: 1px solid #f0f0f5; text-align: left; }
+  table.q-table th { background: #f5f7fb; font-weight: 700; }
+  table.q-table tr:last-child td { border-bottom: none; }
+  table.q-table .row-actions button { border: none; background: none; cursor: pointer; font-size: 14px; margin-right: 6px; }
+
+  .modal-backdrop {
+    display: none; position: fixed; inset: 0; background: rgba(20,20,30,0.4);
+    align-items: center; justify-content: center; padding: 16px; z-index: 100;
+  }
+  .modal-backdrop.show { display: flex; }
+  .modal {
+    background: white; border-radius: 16px; padding: 20px; width: 100%; max-width: 480px;
+    max-height: 90vh; overflow-y: auto;
+  }
+  .modal h3 { margin-top: 0; }
+  .modal label { display: block; font-size: 12px; font-weight: 700; margin: 10px 0 4px; color: var(--sub); }
+  .modal input, .modal textarea, .modal select {
+    width: 100%; padding: 8px 10px; border: 1.5px solid #e4e8f5; border-radius: 8px;
+    font-family: inherit; font-size: 13px;
+  }
+  .modal textarea { resize: vertical; min-height: 44px; }
+  .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+
+  .preview-card { margin-top: 16px; }
+</style>
+</head>
+<body>
+  <header class="appbar">
+    <span>🔧 Study OS 管理者画面</span>
+    <a href="index.html" style="color:white;font-size:12px;">← アプリへ戻る</a>
+  </header>
+  <main style="max-width:760px;">
+    <div class="admin-toolbar">
+      <button class="btn-primary" id="addBtn">＋ 問題を追加</button>
+      <button class="btn-secondary" id="previewBtn">👁 プレビュー</button>
+      <button class="btn-secondary" id="exportJsonBtn">⬇ JSONを保存（questions.jsonを置き換え）</button>
+      <button class="btn-secondary" id="exportCsvBtn">⬇ CSVを書き出す（Sheets貼り付け用）</button>
+    </div>
+    <p style="font-size:12px;color:var(--sub);margin-top:-8px;">
+      ※ 今はGoogle Sheets APIに未接続のため、「保存」はブラウザ内(localStorage)に反映されます。
+      本番反映するには、書き出したJSON/CSVで <code>data/questions.json</code> やGoogle Sheetsを更新してください。
+    </p>
+
+    <table class="q-table" id="qTable">
+      <thead>
+        <tr><th>ID</th><th>資格</th><th>分野</th><th>難易度</th><th>問題</th><th></th></tr>
+      </thead>
+      <tbody id="qTableBody"></tbody>
+    </table>
+
+    <div id="previewArea" class="preview-card"></div>
+  </main>
+
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal">
+      <h3 id="modalTitle">問題を追加</h3>
+      <form id="qForm">
+        <input type="hidden" id="f_id">
+        <label>資格</label><input id="f_cert" required>
+        <label>分野</label><input id="f_field" required>
+        <label>難易度</label>
+        <select id="f_diff"><option>初級</option><option>標準</option><option>上級</option></select>
+        <label>頻出度（1〜5）</label><input id="f_freq" type="number" min="1" max="5" value="3">
+        <label>問題文</label><textarea id="f_q" required></textarea>
+        <label>選択肢A</label><input id="f_a" required>
+        <label>選択肢B</label><input id="f_b" required>
+        <label>選択肢C</label><input id="f_c" required>
+        <label>選択肢D</label><input id="f_d" required>
+        <label>正解（A/B/C/D）</label>
+        <select id="f_correct"><option>A</option><option>B</option><option>C</option><option>D</option></select>
+        <label>解説</label><textarea id="f_explain" required></textarea>
+        <label>間違えやすい理由</label><textarea id="f_pitfall"></textarea>
+        <label>音声用文章</label><textarea id="f_voice"></textarea>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" id="cancelBtn">キャンセル</button>
+          <button type="submit" class="btn-primary">保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/gate.js"></script>
+  <script src="js/data.js"></script>
+  <script>
+    StudyOSGate.protect("admin", () => {
+      const s = document.createElement("script");
+      s.src = "js/admin.js";
+      document.body.appendChild(s);
+    });
+  </script>
+</body>
+</html>
