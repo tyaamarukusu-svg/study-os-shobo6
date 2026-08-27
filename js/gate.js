@@ -6,13 +6,13 @@
 (() => {
   const CONFIG = {
     learner: {
-      password: "unko2026",
+      password: "shobo6-2026",
       storageKey: "studyOS_beta_unlocked_v1",
       title: "Study OS ベータ版",
       message: "ご案内した合言葉を入力してください。",
     },
     admin: {
-      password: "kanri-unko99",
+      password: "kanri-shobo6",
       storageKey: "studyOS_admin_unlocked_v1",
       title: "管理者専用画面",
       message: "管理者用の合言葉を入力してください。",
